@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.youyue.mapper.DepartmentMapper">
+
+    <!-- 查询所有部门 -->
+    <select id="findAll" resultType="com.youyue.domain.Department">
+        SELECT * FROM crm_department
+    </select>
+
+    <!-- 根据部门id查询单个部门 -->
+    <select id="findById" parameterType="java.lang.String"
+            resultType="com.youyue.domain.Department">
+        SELECT * FROM crm_department WHERE depID = #{value}
+    </select>
+
+    <sql id="departSql">
+        crm_department.depID,
+        crm_department.depName
+    </sql>
+
+    <sql id="postSql">
+        crm_post.postId,
+        crm_post.postName,
+        crm_post.depId
+    </sql>
+
+    <!-- 根据部门id查找部门下的所有职务集合 -->
+    <resultMap id="postsByDepIdMap" type="com.youyue.domain.Department">
+        <id column="depID" property="depID"/>
+        <result column="depName" property="depName"/>
+
+        <!-- 一对多关系 职务集合 -->
+        <collection property="postList" ofType="com.youyue.domain.Post">
+            <id column="postId" property="postId"/>
+            <result column="postName" property="postName"/>
+            <result column="depId" property="depId"/>
+        </collection>
+
+    </resultMap>
+
+    <!-- 根据部门id查询职务集合 一对多关系 -->
+    <select id="findPostsByDepId" parameterType="java.lang.String"
+            resultMap="postsByDepIdMap">
+        SELECT
+        <include refid="departSql"/>
+        ,
+        <include refid="postSql"/>
+        FROM crm_department, crm_post
+        WHERE crm_department.depID = crm_post.depId
+        AND crm_department.depID = #{value}
+    </select>
+
+
+</mapper>

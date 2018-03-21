@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.youyue.mapper.PostMapper">
+
+    <select id="findAll" resultType="com.youyue.domain.Post">
+        SELECT * FROM crm_post
+    </select>
+
+    <!-- 根据职务id查询职务对象 -->
+    <select id="findById" parameterType="java.lang.String"
+            resultType="com.youyue.domain.Post">
+        SELECT * FROM crm_post WHERE postId = #{value}
+    </select>
+
+    <!--<select id="findByDepId" parameterMap="java.lang.String"-->
+            <!--resultType="com.youyue.domain.Post">-->
+        <!---->
+      <!--SELECT * FROM crm_post WHERE -->
+    <!--</select>-->
+
+</mapper>
